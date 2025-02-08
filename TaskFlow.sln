@@ -3,15 +3,31 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.11.35327.3
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskFlow", "TaskFlow\TaskFlow.csproj", "{DD981EAB-64CB-4CE1-BC1A-403519B5DF5E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TaskFlow", "TaskFlow\TaskFlow.csproj", "{DD981EAB-64CB-4CE1-BC1A-403519B5DF5E}"
+	ProjectSection(ProjectDependencies) = postProject
+		{268CE923-9024-410A-8D44-2C9977C64918} = {268CE923-9024-410A-8D44-2C9977C64918}
+		{A8827A34-DE7A-40A5-B1C0-B9FD1986EA33} = {A8827A34-DE7A-40A5-B1C0-B9FD1986EA33}
+		{BEEC8247-D8C4-4DDC-B10B-C83589D24B25} = {BEEC8247-D8C4-4DDC-B10B-C83589D24B25}
+	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskFlow.Application", "TaskFlow.Application\TaskFlow.Application.csproj", "{A8827A34-DE7A-40A5-B1C0-B9FD1986EA33}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TaskFlow.Application", "TaskFlow.Application\TaskFlow.Application.csproj", "{A8827A34-DE7A-40A5-B1C0-B9FD1986EA33}"
+	ProjectSection(ProjectDependencies) = postProject
+		{0AE2B29A-4A90-43F0-8F77-D502EB67D965} = {0AE2B29A-4A90-43F0-8F77-D502EB67D965}
+		{268CE923-9024-410A-8D44-2C9977C64918} = {268CE923-9024-410A-8D44-2C9977C64918}
+		{BEEC8247-D8C4-4DDC-B10B-C83589D24B25} = {BEEC8247-D8C4-4DDC-B10B-C83589D24B25}
+	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskFlow.Domain", "TaskFlow.Domain\TaskFlow.Domain.csproj", "{BEEC8247-D8C4-4DDC-B10B-C83589D24B25}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TaskFlow.Domain", "TaskFlow.Domain\TaskFlow.Domain.csproj", "{BEEC8247-D8C4-4DDC-B10B-C83589D24B25}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskFlow.Infrastracture", "TaskFlow.Infrastracture\TaskFlow.Infrastracture.csproj", "{268CE923-9024-410A-8D44-2C9977C64918}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TaskFlow.Infrastracture", "TaskFlow.Infrastracture\TaskFlow.Infrastracture.csproj", "{268CE923-9024-410A-8D44-2C9977C64918}"
+	ProjectSection(ProjectDependencies) = postProject
+		{BEEC8247-D8C4-4DDC-B10B-C83589D24B25} = {BEEC8247-D8C4-4DDC-B10B-C83589D24B25}
+	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskFlow.Shared", "TaskFlow.Shared\TaskFlow.Shared.csproj", "{0AE2B29A-4A90-43F0-8F77-D502EB67D965}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TaskFlow.Shared", "TaskFlow.Shared\TaskFlow.Shared.csproj", "{0AE2B29A-4A90-43F0-8F77-D502EB67D965}"
+	ProjectSection(ProjectDependencies) = postProject
+		{BEEC8247-D8C4-4DDC-B10B-C83589D24B25} = {BEEC8247-D8C4-4DDC-B10B-C83589D24B25}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

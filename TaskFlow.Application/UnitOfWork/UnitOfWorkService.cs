@@ -1,50 +1,27 @@
-﻿namespace TaskFlow.Application.UnitOfWork
+﻿using TaskFlow.Application.Services;
+using TaskFlow.Infrastracture.Repository.RepositoryUoW;
+
+namespace TaskFlow.Application.UnitOfWork
 {
     public class UnitOfWorkService : IUnitOfWorkService
     {
         private readonly IRepositoryUoW _repositoryUoW;
-        private AccountUserService accountService;
-        private DepositService depositService;
-        private BalanceService balanceService;
+        private UserService userService;
 
         public UnitOfWorkService(IRepositoryUoW repositoryUoW)
         {
             _repositoryUoW = repositoryUoW;
         }
 
-        public AccountUserService AccountService
+        public UserService UserService
         {
             get
             {
-                if (accountService is null)
+                if (userService is null)
                 {
-                    accountService = new AccountUserService(_repositoryUoW);
+                    userService = new UserService(_repositoryUoW);
                 }
-                return accountService;
-            }
-        }
-
-        public DepositService DepositService
-        {
-            get
-            {
-                if (depositService is null)
-                {
-                    depositService = new DepositService(_repositoryUoW);
-                }
-                return depositService;
-            }
-        }
-
-        public BalanceService BalanceService
-        {
-            get
-            {
-                if (balanceService is null)
-                {
-                    balanceService = new BalanceService(_repositoryUoW);
-                }
-                return balanceService;
+                return userService;
             }
         }
     }
