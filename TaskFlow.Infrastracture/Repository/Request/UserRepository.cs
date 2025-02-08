@@ -1,6 +1,7 @@
 ﻿using TaskFlow.Domain.Entity;
 using TaskFlow.Infrastracture.Connections;
 using TaskFlow.Infrastracture.Repository.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace TaskFlow.Infrastracture.Repository.Request
 {
@@ -13,24 +14,49 @@ namespace TaskFlow.Infrastracture.Repository.Request
             _context = context;
         }
 
-        public Task<UserEntity> AddUserAsync(UserEntity userEntity)
+        public async Task<UserEntity> AddUserAsync(UserEntity userEntity)
         {
-            throw new NotImplementedException();
-        }
+            if (userEntity is null)
+                throw new ArgumentNullException(nameof(userEntity), "User cannot be null");
 
-        public UserEntity DeleteUserAsync(UserEntity userEntity)
-        {
-            throw new NotImplementedException();
-        }
+            var result = await _context.UserEntity.AddAsync(userEntity);
+            await _context.SaveChangesAsync();
 
-        public Task<List<UserEntity>> GetAllUsersAsync()
-        {
-            throw new NotImplementedException();
+            return result.Entity;
         }
 
         public UserEntity UpdateUserAsync(UserEntity userEntity)
         {
-            throw new NotImplementedException();
+            var response = _context.UserEntity.Update(userEntity);
+            return response.Entity;
+        }
+
+        public UserEntity DeleteUserAsync(UserEntity userEntity)
+        {
+            var response = _context.UserEntity.Remove(userEntity);
+            return response.Entity;
+        }
+
+        public async Task<List<UserEntity>> GetAllUsersAsync()
+        {
+            return await _context.UserEntity
+                .OrderBy(accountUser => accountUser.Name)
+                .Select(accountUser => new UserEntity
+                {
+                    Id = accountUser.Id,
+                    Name = accountUser.Name,
+                    Email = accountUser.Email
+                }).ToListAsync();
+        }
+
+        public async Task<UserEntity?> GetUserByNameAsync(string? name)
+        {
+            return await _context.UserEntity.FirstOrDefaultAsync(user => user.Name == name);
+        }
+
+        public async Task<UserEntity?> GetUserByIdAsync(int? id)
+        {
+            return await _context.UserEntity.FirstOrDefaultAsync(user => user.Id == id);
         }
     }
 }

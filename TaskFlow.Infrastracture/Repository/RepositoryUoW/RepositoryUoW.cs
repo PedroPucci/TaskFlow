@@ -17,7 +17,7 @@ namespace TaskFlow.Infrastracture.Repository.RepositoryUoW
             _context = context;
         }
 
-        public IUserRepository UserEntityRepository
+        public IUserRepository UserRepository
         {
             get
             {

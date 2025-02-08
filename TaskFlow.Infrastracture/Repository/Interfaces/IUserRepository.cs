@@ -8,5 +8,7 @@ namespace TaskFlow.Infrastracture.Repository.Interfaces
         UserEntity UpdateUserAsync(UserEntity userEntity);
         UserEntity DeleteUserAsync(UserEntity userEntity);
         Task<List<UserEntity>> GetAllUsersAsync();
+        Task<UserEntity?> GetUserByNameAsync(string? name);
+        Task<UserEntity?> GetUserByIdAsync(int? id);
     }
 }
