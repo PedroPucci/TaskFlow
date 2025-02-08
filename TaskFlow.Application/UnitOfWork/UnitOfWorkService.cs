@@ -7,6 +7,7 @@ namespace TaskFlow.Application.UnitOfWork
     {
         private readonly IRepositoryUoW _repositoryUoW;
         private UserService userService;
+        private TaskService taskService;
 
         public UnitOfWorkService(IRepositoryUoW repositoryUoW)
         {
@@ -22,6 +23,18 @@ namespace TaskFlow.Application.UnitOfWork
                     userService = new UserService(_repositoryUoW);
                 }
                 return userService;
+            }
+        }
+
+        public TaskService TaskService
+        {
+            get
+            {
+                if (taskService is null)
+                {
+                    taskService = new TaskService(_repositoryUoW);
+                }
+                return taskService;
             }
         }
     }

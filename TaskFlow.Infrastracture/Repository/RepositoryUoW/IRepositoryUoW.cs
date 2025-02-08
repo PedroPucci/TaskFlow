@@ -6,6 +6,7 @@ namespace TaskFlow.Infrastracture.Repository.RepositoryUoW
     public interface IRepositoryUoW
     {
         IUserRepository UserRepository { get; }
+        ITaskRepository TaskRepository { get; }
 
         Task SaveAsync();
         void Commit();

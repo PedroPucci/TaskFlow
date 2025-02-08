@@ -13,14 +13,43 @@ namespace TaskFlow.Infrastracture.Connections
                 entity.Property(u => u.Name).IsRequired();
                 entity.Property(u => u.Email).IsRequired();
                 entity.Property(u => u.Password).IsRequired();
-                //entity.Property(u => u.CreatedAt).HasDefaultValueSql("GETDATE()");
-                //entity.Property(u => u.UpdatedAt).IsRequired(false);
 
-                //entity.HasMany(u => u.Tasks)
-                //      .WithOne(t => t.User)
-                //      .HasForeignKey(t => t.UserId)
-                //      .OnDelete(DeleteBehavior.Cascade);
+                entity.HasMany(u => u.Tasks)
+                      .WithOne(t => t.User)
+                      .HasForeignKey(t => t.UserId)
+                      .OnDelete(DeleteBehavior.Cascade);
             });
+
+            modelBuilder.Entity<TaskEntity>(entity =>
+            {
+                entity.HasKey(t => t.Id);
+
+                entity.Property(t => t.Title)
+                      .IsRequired();
+                      //.HasMaxLength(200);
+
+                entity.Property(t => t.Description)
+                      .IsRequired(false);
+
+                entity.Property(t => t.DueDate)
+                      .IsRequired();
+
+                entity.Property(t => t.Status)
+                      .IsRequired();
+                      //.HasMaxLength(20);
+                      //.HasDefaultValue("Pendente");
+
+                entity.HasOne(t => t.User)
+                      .WithMany(u => u.Tasks)
+                      .HasForeignKey(t => t.UserId)
+                      .OnDelete(DeleteBehavior.Cascade);
+
+                //entity.HasOne(t => t.Category)
+                //      .WithMany(c => c.Tasks)
+                //      .HasForeignKey(t => t.CategoryId)
+                //      .OnDelete(DeleteBehavior.Restrict);
+            });
+
         }
     }
 }
