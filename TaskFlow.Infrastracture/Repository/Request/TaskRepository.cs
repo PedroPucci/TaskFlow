@@ -28,7 +28,8 @@ namespace TaskFlow.Infrastracture.Repository.Request
 
         public TaskEntity DeleteTaskAsync(TaskEntity taskEntity)
         {
-            throw new NotImplementedException();
+            var response = _context.TaskEntity.Remove(taskEntity);
+            return response.Entity;
         }
 
         public async Task<List<TaskEntity>> GetAllTasksAsync()

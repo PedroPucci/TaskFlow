@@ -56,9 +56,30 @@ namespace TaskFlow.Application.Services
             }
         }
 
-        public Task DeleteTaskAsync(int taskId)
+        public async Task DeleteTaskAsync(int taskId)
         {
-            throw new NotImplementedException();
+            using var transaction = _repositoryUoW.BeginTransaction();
+            try
+            {
+                var taskToDelete = await _repositoryUoW.TaskRepository.GetTaskByIdAsync(taskId);                
+
+                if (taskToDelete is not null)
+                    _repositoryUoW.TaskRepository.DeleteTaskAsync(taskToDelete);
+
+                await _repositoryUoW.SaveAsync();
+                await transaction.CommitAsync();
+            }
+            catch (Exception ex)
+            {
+                Log.Error(LogMessages.DeleteTaskError(ex));
+                transaction.Rollback();
+                throw new InvalidOperationException("Message: Error to delete a Task.");
+            }
+            finally
+            {
+                Log.Error(LogMessages.DeleteTaskSuccess());
+                transaction.Dispose();
+            }
         }
         public async Task<List<TaskEntity>> GetAllTasksAsync()
         {

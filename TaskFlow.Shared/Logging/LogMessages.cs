@@ -20,5 +20,7 @@
         public static string GetAllTasksSuccess() => "Message: GetAll with success Task.";
         public static string UpdatingErrorTask(Exception ex) => $"Message: Error updating Task: {ex.Message}";
         public static string UpdatingSuccessTask() => "Message: Successfully updated Task.";
+        public static string DeleteTaskError(Exception ex) => $"Message: Error to delete a Task: {ex.Message}";
+        public static string DeleteTaskSuccess() => "Message: Delete with success Task.";
     }
 }
