@@ -2,6 +2,7 @@
 {
     public static class LogMessages
     {        
+        //Users
         public static string InvalidUserInputs() => "Message: Invalid inputs to User.";
         public static string NullOrEmptyUserName() => "Message: The Name field is null, empty, or whitespace.";
         public static string UpdatingErrorUser(Exception ex) => $"Message: Error updating User: {ex.Message}";
@@ -11,7 +12,11 @@
         public static string AddingUserSuccess() => "Message: Successfully added a new User.";
         public static string DeleteUserError(Exception ex) => $"Message: Error to delete a User: {ex.Message}";
         public static string DeleteUserSuccess() => "Message: Delete with success User.";
-        public static string GetAllUserError(Exception ex) => $"Message: Error to loading the list User: {ex.Message}";
-        public static string GetAllUserSuccess() => "Message: GetAll with success User.";
+        public static string GetAllUsersError(Exception ex) => $"Message: Error to loading the list User: {ex.Message}";
+        public static string GetAllUsersSuccess() => "Message: GetAll with success User.";
+        //Tasks
+        public static string InvalidTaskInputs() => "Message: Invalid inputs to Task.";
+        public static string GetAllTasksError(Exception ex) => $"Message: Error to loading the list Task: {ex.Message}";
+        public static string GetAllTasksSuccess() => "Message: GetAll with success Task.";
     }
 }

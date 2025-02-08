@@ -11,6 +11,7 @@ namespace TaskFlow.Infrastracture.Repository.RepositoryUoW
         private readonly DataContext _context;
         private bool _disposed = false;
         private IUserRepository? _userEntityRepository = null;
+        private ITaskRepository? _taskEntityRepository = null;
 
         public RepositoryUoW(DataContext context)
         {
@@ -26,6 +27,18 @@ namespace TaskFlow.Infrastracture.Repository.RepositoryUoW
                     _userEntityRepository = new UserRepository(_context);
                 }
                 return _userEntityRepository;
+            }
+        }
+
+        public ITaskRepository TaskRepository
+        {
+            get
+            {
+                if (_taskEntityRepository is null)
+                {
+                    _taskEntityRepository = new TaskRepository(_context);
+                }
+                return _taskEntityRepository;
             }
         }
 

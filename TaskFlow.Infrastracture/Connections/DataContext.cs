@@ -19,6 +19,7 @@ namespace TaskFlow.Infrastracture.Connections
         }
 
         public DbSet<UserEntity> UserEntity { get; set; }
+        public DbSet<TaskEntity> TaskEntity { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

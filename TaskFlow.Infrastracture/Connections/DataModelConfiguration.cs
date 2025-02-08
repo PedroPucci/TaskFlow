@@ -26,7 +26,6 @@ namespace TaskFlow.Infrastracture.Connections
 
                 entity.Property(t => t.Title)
                       .IsRequired();
-                      //.HasMaxLength(200);
 
                 entity.Property(t => t.Description)
                       .IsRequired(false);
@@ -36,8 +35,6 @@ namespace TaskFlow.Infrastracture.Connections
 
                 entity.Property(t => t.Status)
                       .IsRequired();
-                      //.HasMaxLength(20);
-                      //.HasDefaultValue("Pendente");
 
                 entity.HasOne(t => t.User)
                       .WithMany(u => u.Tasks)

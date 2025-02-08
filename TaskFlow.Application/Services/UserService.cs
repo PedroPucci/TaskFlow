@@ -135,13 +135,13 @@ namespace TaskFlow.Application.Services
             }
             catch (Exception ex)
             {
-                Log.Error(LogMessages.GetAllUserError(ex));
+                Log.Error(LogMessages.GetAllUsersError(ex));
                 transaction.Rollback();
                 throw new InvalidOperationException("Message: Error to loading the list User");
             }
             finally
             {
-                Log.Error(LogMessages.GetAllUserSuccess());
+                Log.Error(LogMessages.GetAllUsersSuccess());
                 transaction.Dispose();
             }
         }

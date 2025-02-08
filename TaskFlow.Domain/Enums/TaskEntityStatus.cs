@@ -1,6 +1,6 @@
 ﻿namespace TaskFlow.Domain.Enums
 {
-    public enum TaskStatus
+    public enum TaskEntityStatus
     {
         Pending = 1,
         Completed = 2
