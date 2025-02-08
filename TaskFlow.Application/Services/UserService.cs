@@ -1,6 +1,7 @@
 ﻿using Serilog;
 using TaskFlow.Application.Services.Interfaces;
 using TaskFlow.Domain.Entity;
+using TaskFlow.Domain.General;
 using TaskFlow.Infrastracture.Repository.RepositoryUoW;
 using TaskFlow.Shared.Logging;
 using TaskFlow.Shared.Validator;
@@ -43,7 +44,7 @@ namespace TaskFlow.Application.Services
             {
                 Log.Error(LogMessages.AddingUserError(ex));
                 transaction.Rollback();
-                throw new InvalidOperationException("Message: Error to add a new User");
+                throw new InvalidOperationException("Message: Error to add a new User.");
             }
             finally
             {
@@ -57,41 +58,30 @@ namespace TaskFlow.Application.Services
             using var transaction = _repositoryUoW.BeginTransaction();
             try
             {
-                var isValidUser = await IsValidUserRequest(userEntity);
-                string userName = "";
-                UserEntity? userNameFound = new UserEntity();
+                var userById = await _repositoryUoW.UserRepository.GetUserByIdAsync(userEntity.Id);
+                if (userById == null)
+                    throw new InvalidOperationException("Message: Error updating User");
 
-                var validationResult = ValidateUser(userEntity, isValidUser);
-                if (!validationResult.Success)
-                    return validationResult;
+                userById.Name = userEntity.Name;
+                userById.Email = userEntity.Email;
+                userById.ModificationDate = DateTime.UtcNow;
+                userById.IsActive = userEntity.IsActive;
 
-                if (userEntity.Name is not null)
-                    userName = userEntity.Name;
-
-                userNameFound = await _repositoryUoW.UserRepository.GetUserByNameAsync(userName);
-
-                ValidateUserExistsForAction(userNameFound, "update");
-
-                if (userNameFound is not null)
-                {
-                    userNameFound.Email = userEntity.Email;
-                    userNameFound.ModificationDate = DateTime.UtcNow;
-                    var result = _repositoryUoW.UserRepository.UpdateUserAsync(userNameFound);
-                }
+                _repositoryUoW.UserRepository.UpdateUserAsync(userById);
 
                 await _repositoryUoW.SaveAsync();
                 await transaction.CommitAsync();
+
                 return Result<UserEntity>.Ok();
             }
             catch (Exception ex)
             {
-                Log.Error(LogMessages.UpdatingErrorUser(ex));
+                Log.Error(LogMessages.UpdatingErrorTask(ex));
                 transaction.Rollback();
-                throw new InvalidOperationException("Message: Error to update a User");
+                throw new InvalidOperationException("Message: Error updating Task", ex);
             }
             finally
             {
-                Log.Error(LogMessages.UpdatingSuccessUser());
                 transaction.Dispose();
             }
         }
@@ -115,7 +105,7 @@ namespace TaskFlow.Application.Services
             {
                 Log.Error(LogMessages.DeleteUserError(ex));
                 transaction.Rollback();
-                throw new InvalidOperationException("Message: Error to delete a AccountUser");
+                throw new InvalidOperationException("Message: Error to delete a AccountUser.");
             }
             finally
             {
@@ -137,7 +127,7 @@ namespace TaskFlow.Application.Services
             {
                 Log.Error(LogMessages.GetAllUsersError(ex));
                 transaction.Rollback();
-                throw new InvalidOperationException("Message: Error to loading the list User");
+                throw new InvalidOperationException("Message: Error to loading the list User.");
             }
             finally
             {

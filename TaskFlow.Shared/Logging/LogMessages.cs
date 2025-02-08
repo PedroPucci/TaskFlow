@@ -18,5 +18,7 @@
         public static string InvalidTaskInputs() => "Message: Invalid inputs to Task.";
         public static string GetAllTasksError(Exception ex) => $"Message: Error to loading the list Task: {ex.Message}";
         public static string GetAllTasksSuccess() => "Message: GetAll with success Task.";
+        public static string UpdatingErrorTask(Exception ex) => $"Message: Error updating Task: {ex.Message}";
+        public static string UpdatingSuccessTask() => "Message: Successfully updated Task.";
     }
 }

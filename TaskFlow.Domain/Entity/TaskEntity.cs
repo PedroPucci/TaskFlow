@@ -1,4 +1,5 @@
-﻿using TaskFlow.Domain.Enums;
+﻿using System.Text.Json.Serialization;
+using TaskFlow.Domain.Enums;
 using TaskFlow.Domain.General;
 
 namespace TaskFlow.Domain.Entity
@@ -9,9 +10,9 @@ namespace TaskFlow.Domain.Entity
         public string? Description { get; set; }
         public DateTime DueDate { get; set; }
         public TaskEntityStatus Status { get; set; }
-
-        // Relacionamento com Usuário
+        
         public int UserId { get; set; }
+        [JsonIgnore]
         public UserEntity? User { get; set; }
     }
 }

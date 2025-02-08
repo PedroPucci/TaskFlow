@@ -1,4 +1,5 @@
-﻿using TaskFlow.Domain.General;
+﻿using System.Text.Json.Serialization;
+using TaskFlow.Domain.General;
 
 namespace TaskFlow.Domain.Entity
 {
@@ -9,6 +10,7 @@ namespace TaskFlow.Domain.Entity
         public string? Password { get; set; }
         public bool? IsActive { get; set; }
 
+        [JsonIgnore]
         public ICollection<TaskEntity> Tasks { get; set; } = new List<TaskEntity>();
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using TaskFlow.Domain.Dto;
 using TaskFlow.Domain.Entity;
 using TaskFlow.Infrastracture.Connections;
 using TaskFlow.Infrastracture.Repository.Interfaces;
@@ -43,9 +44,62 @@ namespace TaskFlow.Infrastracture.Repository.Request
                 }).ToListAsync();
         }
 
-        public TaskEntity UpdateTaskAsync(TaskEntity taskEntity)
+        public async Task<List<TaskDto>> GetTasksWithUserAsync()
         {
-            throw new NotImplementedException();
+            return await _context.TaskEntity
+                .Include(t => t.User)
+                .OrderBy(t => t.Title)
+                .Select(t => new TaskDto
+                {
+                    TaskId = t.Id,
+                    UserId = t.UserId,
+                    UserName = t.User.Name,
+                    Title = t.Title,
+                    Description = t.Description,
+                    DueDate = t.DueDate
+                })
+                .ToListAsync();
+        }
+
+        public async Task<List<TaskDto>> GetTasksByUserAsync(int userId)
+        {
+            return await _context.TaskEntity
+                .Where(t => t.UserId == userId)
+                .Include(t => t.User)
+                .OrderBy(t => t.Title)
+                .Select(t => new TaskDto
+                {
+                    TaskId = t.Id,
+                    UserId = t.UserId,
+                    UserName = t.User.Name,
+                    Title = t.Title,
+                    Description = t.Description,
+                    DueDate = t.DueDate,
+                })
+                .ToListAsync();
+        }
+
+        public void UpdateTask(TaskEntity taskEntity)
+        {
+            _context.TaskEntity.Update(taskEntity);
+        }
+
+        public async Task<TaskEntity> GetTaskByIdAsync(int taskId)
+        {
+            var task = await _context.TaskEntity
+                .Where(t => t.Id == taskId)
+                .Select(t => new TaskEntity
+                {          
+                    Id = t.Id,
+                    Title = t.Title,
+                    Description = t.Description,
+                    DueDate = t.DueDate,
+                    Status = t.Status,                    
+                    ModificationDate = t.ModificationDate
+                })
+                .FirstOrDefaultAsync();
+
+            return task;
         }
     }
 }

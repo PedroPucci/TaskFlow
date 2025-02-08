@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
 using Serilog;
 using TaskFlow.Application.Services.Interfaces;
+using TaskFlow.Domain.Dto;
 using TaskFlow.Domain.Entity;
 using TaskFlow.Domain.Enums;
 using TaskFlow.Infrastracture.Repository.RepositoryUoW;
@@ -46,7 +47,7 @@ namespace TaskFlow.Application.Services
             {
                 Log.Error(LogMessages.AddingUserError(ex));
                 transaction.Rollback();
-                throw new InvalidOperationException("Message: Error to add a new Task");
+                throw new InvalidOperationException("Message: Error to add a new Task.");
             }
             finally
             {
@@ -72,7 +73,7 @@ namespace TaskFlow.Application.Services
             {
                 Log.Error(LogMessages.GetAllTasksError(ex));
                 transaction.Rollback();
-                throw new InvalidOperationException("Message: Error to loading the list Task");
+                throw new InvalidOperationException("Message: Error to loading the list Task.");
             }
             finally
             {
@@ -81,9 +82,82 @@ namespace TaskFlow.Application.Services
             }
         }
 
-        public Task<Result<TaskEntity>> UpdateTaskAsync(TaskEntity taskEntity)
+        public async Task<List<TaskDto>> GetTasksWithUserAsync()
         {
-            throw new NotImplementedException();
+            using var transaction = _repositoryUoW.BeginTransaction();
+            try
+            {
+                List<TaskDto> tasks = await _repositoryUoW.TaskRepository.GetTasksWithUserAsync();
+                _repositoryUoW.Commit();
+                return tasks;
+            }
+            catch (Exception ex)
+            {
+                Log.Error(LogMessages.GetAllTasksError(ex));
+                transaction.Rollback();
+                throw new InvalidOperationException("Message: Error to loading the list Task with info user.");
+            }
+            finally
+            {
+                Log.Error(LogMessages.GetAllTasksSuccess());
+                transaction.Dispose();
+            }
+        }
+
+        public async Task<List<TaskDto>> GetTasksByUserAsync(int userId)
+        {
+            using var transaction = _repositoryUoW.BeginTransaction();
+            try
+            {
+                List<TaskDto> tasks = await _repositoryUoW.TaskRepository.GetTasksByUserAsync(userId);
+                _repositoryUoW.Commit();
+                return tasks;
+            }
+            catch (Exception ex)
+            {
+                Log.Error(LogMessages.GetAllTasksError(ex));
+                transaction.Rollback();
+                throw new InvalidOperationException("Message: Error to loading the list Task bu userId.");
+            }
+            finally
+            {
+                Log.Error(LogMessages.GetAllTasksSuccess());
+                transaction.Dispose();
+            }
+        }
+
+        public async Task<Result<TaskEntity>> UpdateTaskAsync(TaskEntity taskEntity)
+        {
+            using var transaction = _repositoryUoW.BeginTransaction();
+            try
+            {
+                var taskById = await _repositoryUoW.TaskRepository.GetTaskByIdAsync(taskEntity.Id);
+                if (taskById == null)
+                    throw new InvalidOperationException("Message: Error updating Task");
+
+                taskById.Title = taskEntity.Title;
+                taskById.Description = taskEntity.Description;
+                taskById.DueDate = taskEntity.DueDate;
+                taskById.ModificationDate = DateTime.UtcNow;
+                taskById.UserId = taskEntity.UserId;
+
+                _repositoryUoW.TaskRepository.UpdateTask(taskById);
+
+                await _repositoryUoW.SaveAsync();
+                await transaction.CommitAsync();
+
+                return Result<TaskEntity>.Ok();
+            }
+            catch (Exception ex)
+            {
+                Log.Error(LogMessages.UpdatingErrorTask(ex));
+                transaction.Rollback();
+                throw new InvalidOperationException("Message: Error updating Task", ex);
+            }
+            finally
+            {
+                transaction.Dispose();
+            }
         }
 
         private async Task<Result<TaskEntity>> IsValidTaskRequest(TaskEntity taskEntity)

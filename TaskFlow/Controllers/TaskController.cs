@@ -56,5 +56,23 @@ namespace TaskFlow.Controllers
             var tasks = await _serviceUoW.TaskService.GetAllTasksAsync();
             return Ok(tasks);
         }
+
+        [HttpGet("GetTasksWithUserAsync")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<UserEntity>))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetTasksWithUserAsync()
+        {
+            var tasks = await _serviceUoW.TaskService.GetTasksWithUserAsync();
+            return Ok(tasks);
+        }
+
+        [HttpGet("GetTasksByUserAsync")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<UserEntity>))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetTasksByUserAsync(int userId)
+        {
+            var tasks = await _serviceUoW.TaskService.GetTasksByUserAsync(userId);
+            return Ok(tasks);
+        }
     }
 }
