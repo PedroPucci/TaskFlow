@@ -159,7 +159,6 @@ namespace TaskFlow.Application.Services
                 taskById.ModificationDate = DateTime.UtcNow;
                 taskById.Status = taskEntity.Status;
                 taskById.DueDate = DateTime.SpecifyKind(taskEntity.DueDate, DateTimeKind.Utc);
-                taskById.UserId = taskEntity.UserId;
 
                 _repositoryUoW.TaskRepository.UpdateTask(taskById);
 
