@@ -97,7 +97,8 @@ namespace TaskFlow.Infrastracture.Repository.Request
                     Description = t.Description,
                     DueDate = t.DueDate,
                     Status = t.Status,                    
-                    ModificationDate = t.ModificationDate
+                    ModificationDate = t.ModificationDate,
+                    UserId = t.UserId
                 })
                 .FirstOrDefaultAsync();
 

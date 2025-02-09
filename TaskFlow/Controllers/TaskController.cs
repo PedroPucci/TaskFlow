@@ -70,19 +70,19 @@ namespace TaskFlow.Controllers
             return View(taskEntity);
         }
 
-        //[HttpGet]
-        //public async Task<IActionResult> Edit(int id)
-        //{
-        //    if (id <= 0)
-        //        return BadRequest("ID inválido.");
+        [HttpGet]
+        public async Task<IActionResult> Edit(int id)
+        {
+            if (id <= 0)
+                return BadRequest("ID inválido.");
 
-        //    var user = await _serviceUoW.TaskService.(id);
+            var result = await _serviceUoW.TaskService.GetTaskByIdAsync(id);
 
-        //    if (user == null)
-        //        return NotFound();
+            if (result == null)
+                return NotFound();
 
-        //    return View(user);
-        //}
+            return View(result);
+        }
 
         [HttpGet("TasksByUser")]
         public async Task<IActionResult> TasksByUser(int? userId)

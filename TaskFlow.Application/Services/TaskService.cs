@@ -156,8 +156,9 @@ namespace TaskFlow.Application.Services
 
                 taskById.Title = taskEntity.Title;
                 taskById.Description = taskEntity.Description;
-                taskById.DueDate = taskEntity.DueDate;
                 taskById.ModificationDate = DateTime.UtcNow;
+                taskById.Status = taskEntity.Status;
+                taskById.DueDate = DateTime.SpecifyKind(taskEntity.DueDate, DateTimeKind.Utc);
                 taskById.UserId = taskEntity.UserId;
 
                 _repositoryUoW.TaskRepository.UpdateTask(taskById);
@@ -178,6 +179,41 @@ namespace TaskFlow.Application.Services
                 transaction.Dispose();
             }
         }
+
+        public async Task<TaskEntity> GetTaskByIdAsync(int taskId)
+        {
+            using var transaction = _repositoryUoW.BeginTransaction();
+            try
+            {
+                if (taskId <= 0)
+                {
+                    Log.Error("Task ID inválido: " + taskId);
+                    throw new ArgumentException("O ID da tarefa deve ser um número positivo.");
+                }
+
+                var task = await _repositoryUoW.TaskRepository.GetTaskByIdAsync(taskId);
+
+                if (task == null)
+                {
+                    Log.Warning($"Nenhuma tarefa encontrada com o ID: {taskId}");
+                    throw new KeyNotFoundException($"Nenhuma tarefa encontrada com o ID: {taskId}");
+                }
+
+                _repositoryUoW.Commit();
+                return task;
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"Erro ao buscar a tarefa com ID {taskId}: {ex.Message}");
+                transaction.Rollback();
+                throw new InvalidOperationException("Erro ao recuperar a tarefa.", ex);
+            }
+            finally
+            {
+                transaction.Dispose();
+            }
+        }
+
 
         private async Task<Result<TaskEntity>> IsValidTaskRequest(TaskEntity taskEntity)
         {
