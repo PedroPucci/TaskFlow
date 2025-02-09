@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TaskFlow.Application.UnitOfWork;
+using TaskFlow.Domain.Dto;
 using TaskFlow.Domain.Entity;
 
 namespace TaskFlow.Controllers
@@ -82,6 +83,18 @@ namespace TaskFlow.Controllers
 
         //    return View(user);
         //}
+
+        [HttpGet("TasksByUser")]
+        public async Task<IActionResult> TasksByUser(int? userId)
+        {
+            if (userId == null)
+            {
+                return View(new List<TaskDto>());
+            }
+
+            var tasks = await _serviceUoW.TaskService.GetTasksByUserAsync(userId.Value);
+            return View(tasks);
+        }
 
         public IActionResult Success()
         {

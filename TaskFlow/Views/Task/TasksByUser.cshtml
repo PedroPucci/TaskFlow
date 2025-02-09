@@ -1,0 +1,53 @@
+﻿@model List<TaskFlow.Domain.Dto.TaskDto>
+
+@{
+    ViewData["Title"] = "Buscar Tarefas por Usuário";
+}
+
+<h2>Buscar Tarefas por Usuário</h2>
+
+<form asp-action="TasksByUser" method="get">
+    <div class="form-group">
+        <label for="userId">Digite o ID do Usuário:</label>
+        <input type="number" class="form-control" id="userId" name="userId" min="1" required
+               placeholder="Digite o ID do usuário e pressione Enter" />
+    </div>
+    <br />
+    <button type="submit" class="btn btn-primary">Buscar</button>
+</form>
+
+<hr />
+
+@if (Model != null && Model.Count > 0)
+{
+    <h3>Tarefas do Usuário</h3>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Título</th>
+                <th>Descrição</th>
+                <th>Data de Vencimento</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var task in Model)
+            {
+                <tr>
+                    <td>@task.Title</td>
+                    <td>@task.Description</td>
+                    <td>@task.DueDate.ToString("dd/MM/yyyy")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else if (Model != null)
+{
+    <div class="alert alert-warning" role="alert">
+        Nenhuma tarefa encontrada para este usuário.
+    </div>
+}
+
+<a asp-action="Create" class="btn btn-primary">Nova Tarefa</a>
+<a asp-action="List" class="btn btn-secondary">Voltar</a>
