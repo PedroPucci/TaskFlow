@@ -45,7 +45,8 @@ namespace TaskFlow.Infrastracture.Repository.Request
                 {
                     Id = accountUser.Id,
                     Name = accountUser.Name,
-                    Email = accountUser.Email
+                    Email = accountUser.Email,
+                    IsActive = accountUser.IsActive,
                 }).ToListAsync();
         }
 

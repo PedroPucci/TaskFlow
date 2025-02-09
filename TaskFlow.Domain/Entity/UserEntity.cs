@@ -8,7 +8,7 @@ namespace TaskFlow.Domain.Entity
         public string? Name { get; set; }
         public string? Email { get; set; }
         public string? Password { get; set; }
-        public bool? IsActive { get; set; }
+        public bool IsActive { get; set; } = true;
 
         [JsonIgnore]
         public ICollection<TaskEntity> Tasks { get; set; } = new List<TaskEntity>();

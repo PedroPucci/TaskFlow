@@ -12,7 +12,7 @@ using TaskFlow.Infrastracture.Connections;
 namespace TaskFlow.Infrastracture.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20250208180039_PrimeiraMigracao")]
+    [Migration("20250209014555_PrimeiraMigracao")]
     partial class PrimeiraMigracao
     {
         /// <inheritdoc />
@@ -77,7 +77,7 @@ namespace TaskFlow.Infrastracture.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<bool?>("IsActive")
+                    b.Property<bool>("IsActive")
                         .HasColumnType("boolean");
 
                     b.Property<DateTime?>("ModificationDate")

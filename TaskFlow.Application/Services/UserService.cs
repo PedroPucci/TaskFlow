@@ -86,6 +86,14 @@ namespace TaskFlow.Application.Services
             }
         }
 
+        public async Task<UserEntity?> GetUserByIdAsync(int id)
+        {
+            if (id <= 0)
+                return null;
+
+            return await _repositoryUoW.UserRepository.GetUserByIdAsync(id);
+        }
+
         public async Task DeleteUserAsync(int userId)
         {
             using var transaction = _repositoryUoW.BeginTransaction();
