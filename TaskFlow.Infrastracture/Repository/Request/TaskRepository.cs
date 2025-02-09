@@ -42,6 +42,7 @@ namespace TaskFlow.Infrastracture.Repository.Request
                     Title = task.Title,
                     CreateDate = task.CreateDate,
                     Description = task.Description,
+                    Status = task.Status,
                 }).ToListAsync();
         }
 
