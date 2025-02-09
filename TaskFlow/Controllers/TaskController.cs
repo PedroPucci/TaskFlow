@@ -4,8 +4,6 @@ using TaskFlow.Domain.Entity;
 
 namespace TaskFlow.Controllers
 {
-    [ApiController]
-    [Route("api/v1/task")]
     public class TaskController : Controller
     {
         private readonly IUnitOfWorkService _serviceUoW;
@@ -15,64 +13,79 @@ namespace TaskFlow.Controllers
             _serviceUoW = unitOfWorkService;
         }
 
+        [HttpGet]
+        public IActionResult Create()
+        {
+            return View();
+        }
+
         [HttpPost]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> AddTask([FromBody] TaskEntity taskEntity)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(TaskEntity taskEntity)
         {
             if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+                return View(taskEntity);
 
             var result = await _serviceUoW.TaskService.AddTaskAsync(taskEntity);
-            return result.Success ? Ok(result) : BadRequest(result);
+            if (result.Success)
+                return RedirectToAction("Success");
+
+            ModelState.AddModelError("", "Erro ao cadastrar tarefa.");
+            return View(taskEntity);
         }
 
-        [HttpPut]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesDefaultResponseType]
-        public async Task<IActionResult> UpdateTask([FromBody] TaskEntity taskEntity)
+        [HttpGet]
+        public async Task<IActionResult> List()
         {
-            var result = await _serviceUoW.TaskService.UpdateTaskAsync(taskEntity);
-            return result.Success ? Ok(result) : BadRequest(taskEntity);
+            var users = await _serviceUoW.TaskService.GetAllTasksAsync();
+            return View(users);
         }
 
-        [HttpDelete("{id}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesDefaultResponseType]
-        public async Task<IActionResult> DeleteTask(int id)
+        [HttpPost]
+        public async Task<IActionResult> Delete(int id)
         {
+            if (id <= 0)
+                return BadRequest("ID inválido.");
+
             await _serviceUoW.TaskService.DeleteTaskAsync(id);
-            return Ok();
+
+            ModelState.AddModelError("", "Erro ao excluir tarefa.");
+            return RedirectToAction("List");
         }
 
-        [HttpGet("All")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<UserEntity>))]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> GetAllTaks()
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(TaskEntity taskEntity)
         {
-            var tasks = await _serviceUoW.TaskService.GetAllTasksAsync();
-            return Ok(tasks);
+            if (!ModelState.IsValid)
+                return View(taskEntity);
+
+            var result = await _serviceUoW.TaskService.UpdateTaskAsync(taskEntity);
+
+            if (result.Success)
+                return RedirectToAction("List");
+
+            ModelState.AddModelError("", "Erro ao editar tarefa.");
+            return View(taskEntity);
         }
 
-        [HttpGet("GetTasksWithUserAsync")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<UserEntity>))]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> GetTasksWithUserAsync()
-        {
-            var tasks = await _serviceUoW.TaskService.GetTasksWithUserAsync();
-            return Ok(tasks);
-        }
+        //[HttpGet]
+        //public async Task<IActionResult> Edit(int id)
+        //{
+        //    if (id <= 0)
+        //        return BadRequest("ID inválido.");
 
-        [HttpGet("GetTasksByUserAsync")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<UserEntity>))]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> GetTasksByUserAsync(int userId)
+        //    var user = await _serviceUoW.TaskService.(id);
+
+        //    if (user == null)
+        //        return NotFound();
+
+        //    return View(user);
+        //}
+
+        public IActionResult Success()
         {
-            var tasks = await _serviceUoW.TaskService.GetTasksByUserAsync(userId);
-            return Ok(tasks);
+            return View();
         }
     }
 }

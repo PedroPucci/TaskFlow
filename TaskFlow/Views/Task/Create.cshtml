@@ -1,0 +1,61 @@
+﻿@model TaskFlow.Domain.Entity.TaskEntity
+
+@{
+    ViewData["Title"] = "Cadastro de Tarefa";
+}
+
+<h2>Cadastro de Tarefa</h2>
+
+<form asp-action="Create" method="post">
+    @Html.AntiForgeryToken()
+
+    <div class="form-group">
+        <label asp-for="Title">Título</label>
+        <input asp-for="Title" class="form-control" placeholder="Digite o título"
+               data-val="true" data-val-required="O campo título não pode estar vazio!"
+               minlength="4" title="O campo título não pode ter menos de 4 caracteres!" />
+        <span asp-validation-for="Title" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Description">Descrição</label>
+        <input asp-for="Description" class="form-control" placeholder="Digite a descrição"
+               data-val="true" data-val-required="O campo descrição não pode estar vazio!"
+               minlength="4" title="O campo descrição não pode ter menos de 4 caracteres!" />
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="DueDate">Data de Vencimento</label>
+        <input asp-for="DueDate" type="date" class="form-control"
+               data-val="true" data-val-required="A Data de Vencimento não pode estar vazia!"
+               title="Escolha uma data válida para a conclusão da tarefa." />
+        <span asp-validation-for="DueDate" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Status">Status</label>
+        <select asp-for="Status" class="form-control">
+            <option value="1">Pendente</option>
+            <option value="2">Concluída</option>
+        </select>
+        <span asp-validation-for="Status" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+    <label asp-for="UserId">Usuário Responsável</label>
+    <input asp-for="UserId" type="number" class="form-control"
+           data-val="true" data-val-required="O campo Usuário Responsável não pode estar vazio!"
+           min="1" title="O ID do usuário deve ser um número válido maior que zero!"
+           placeholder="Digite o ID do usuário responsável pela tarefa" />
+    <span asp-validation-for="UserId" class="text-danger"></span>
+    </div>
+    <br />
+
+    <button type="submit" class="btn btn-primary">Cadastrar Tarefa</button>
+    <a asp-action="List" class="btn btn-secondary">Cancelar</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

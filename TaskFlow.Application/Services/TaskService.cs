@@ -1,5 +1,4 @@
-﻿using FluentValidation;
-using Serilog;
+﻿using Serilog;
 using TaskFlow.Application.Services.Interfaces;
 using TaskFlow.Domain.Dto;
 using TaskFlow.Domain.Entity;
@@ -21,21 +20,20 @@ namespace TaskFlow.Application.Services
         }
 
         public async Task<Result<TaskEntity>> AddTaskAsync(TaskEntity taskEntity)
-        {
+        {           
             using var transaction = _repositoryUoW.BeginTransaction();
             try
             {
-                var isValidTask = await IsValidTaskRequest(taskEntity);
+                var isValidUser = await IsValidTaskRequest(taskEntity);
 
-                if (!isValidTask.Success)
+                if (!isValidUser.Success)
                 {
                     Log.Error(LogMessages.InvalidTaskInputs());
-                    return Result<TaskEntity>.Error(isValidTask.Message);
+                    return Result<TaskEntity>.Error(isValidUser.Message);
                 }
 
                 taskEntity.ModificationDate = DateTime.UtcNow;
-                taskEntity.Title = taskEntity.Description?.Trim().ToLower();
-                taskEntity.Status = TaskEntityStatus.Pending;
+                taskEntity.DueDate = DateTime.SpecifyKind(taskEntity.DueDate, DateTimeKind.Utc);
                 var result = await _repositoryUoW.TaskRepository.AddTaskAsync(taskEntity);
 
                 await _repositoryUoW.SaveAsync();
@@ -47,7 +45,7 @@ namespace TaskFlow.Application.Services
             {
                 Log.Error(LogMessages.AddingUserError(ex));
                 transaction.Rollback();
-                throw new InvalidOperationException("Message: Error to add a new Task.");
+                throw new InvalidOperationException("Message: Error to add a new User.");
             }
             finally
             {

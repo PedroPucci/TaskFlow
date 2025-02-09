@@ -9,6 +9,7 @@
 <table class="table table-striped">
     <thead>
         <tr>
+            <th>Id</th>
             <th>Nome</th>
             <th>Email</th>
             <th>Ativo</th>
@@ -19,6 +20,7 @@
         @foreach (var user in Model)
         {
             <tr>
+                <td>@user.Id</td>
                 <td>@user.Name</td>
                 <td>@user.Email</td>
                 <td>@(user.IsActive ? "Sim" : "Não")</td>
