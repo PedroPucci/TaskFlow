@@ -22,5 +22,12 @@
         public static string UpdatingSuccessTask() => "Message: Successfully updated Task.";
         public static string DeleteTaskError(Exception ex) => $"Message: Error to delete a Task: {ex.Message}";
         public static string DeleteTaskSuccess() => "Message: Delete with success Task.";
+        //Categories
+        public static string InvalidCategoryInputs() => "Message: Invalid inputs to Category.";
+        public static string AddingCategoryError(Exception ex) => $"Message: Error adding a new Category: {ex.Message}";
+        public static string AddingCategorySuccess() => "Message: Successfully added a new Category.";
+        public static string GetAllCategoriesError(Exception ex) => $"Message: Error to loading the list Category: {ex.Message}";
+        public static string GetAllCategoriesSuccess() => "Message: GetAll with success Category.";
+        public static string UpdatingErrorCategory(Exception ex) => $"Message: Error updating Category: {ex.Message}";
     }
 }

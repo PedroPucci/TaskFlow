@@ -20,6 +20,40 @@ namespace TaskFlow.Infrastracture.Connections
                       .OnDelete(DeleteBehavior.Cascade);
             });
 
+            //modelBuilder.Entity<TaskEntity>(entity =>
+            //{
+            //    entity.HasKey(t => t.Id);
+
+            //    entity.Property(t => t.Title)
+            //          .IsRequired();
+
+            //    entity.Property(t => t.Description)
+            //          .IsRequired(false);
+
+            //    entity.Property(t => t.DueDate)
+            //          .IsRequired();
+
+            //    entity.Property(t => t.Status)
+            //          .IsRequired();
+
+            //    entity.HasOne(t => t.User)
+            //          .WithMany(u => u.Tasks)
+            //          .HasForeignKey(t => t.UserId)
+            //          .OnDelete(DeleteBehavior.Cascade);
+            //});
+
+            modelBuilder.Entity<CategoryEntity>(entity =>
+            {
+                entity.HasKey(c => c.Id);
+                entity.Property(c => c.Name)
+                      .IsRequired(); 
+
+                entity.HasMany(c => c.Tasks)
+                      .WithOne(t => t.Category)
+                      .HasForeignKey(t => t.CategoryId)
+                      .OnDelete(DeleteBehavior.Restrict);
+            });
+
             modelBuilder.Entity<TaskEntity>(entity =>
             {
                 entity.HasKey(t => t.Id);
@@ -41,12 +75,11 @@ namespace TaskFlow.Infrastracture.Connections
                       .HasForeignKey(t => t.UserId)
                       .OnDelete(DeleteBehavior.Cascade);
 
-                //entity.HasOne(t => t.Category)
-                //      .WithMany(c => c.Tasks)
-                //      .HasForeignKey(t => t.CategoryId)
-                //      .OnDelete(DeleteBehavior.Restrict);
+                entity.HasOne(t => t.Category)
+                      .WithMany(c => c.Tasks)
+                      .HasForeignKey(t => t.CategoryId)
+                      .OnDelete(DeleteBehavior.Restrict);
             });
-
         }
     }
 }

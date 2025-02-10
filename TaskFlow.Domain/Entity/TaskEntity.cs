@@ -12,7 +12,10 @@ namespace TaskFlow.Domain.Entity
         public TaskEntityStatus Status { get; set; }
         
         public int UserId { get; set; }
+        public int CategoryId { get; set; }
         [JsonIgnore]
         public UserEntity? User { get; set; }
+        [JsonIgnore]
+        public CategoryEntity? Category { get; set; }
     }
 }

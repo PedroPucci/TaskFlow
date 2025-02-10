@@ -12,6 +12,7 @@ namespace TaskFlow.Infrastracture.Repository.RepositoryUoW
         private bool _disposed = false;
         private IUserRepository? _userEntityRepository = null;
         private ITaskRepository? _taskEntityRepository = null;
+        private ICategoryRepository? _categoryRepository = null;
 
         public RepositoryUoW(DataContext context)
         {
@@ -39,6 +40,18 @@ namespace TaskFlow.Infrastracture.Repository.RepositoryUoW
                     _taskEntityRepository = new TaskRepository(_context);
                 }
                 return _taskEntityRepository;
+            }
+        }
+
+        public ICategoryRepository CategoryRepository
+        {
+            get
+            {
+                if (_categoryRepository is null)
+                {
+                    _categoryRepository = new CategoryRepository(_context);
+                }
+                return _categoryRepository;
             }
         }
 

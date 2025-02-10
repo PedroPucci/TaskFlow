@@ -6,6 +6,6 @@ namespace TaskFlow.Application.UnitOfWork
     {
         UserService UserService { get; }
         TaskService TaskService { get; }
-        //CategoryService CategoryService { get; }
+        CategoryService CategoryService { get; }
     }
 }
