@@ -144,4 +144,4 @@ Biblioteca utilizada para validações e compartilhamento de recursos comuns:
 1. cadastre usuarios.
 2. cadastre categorias.
 3. cadastre tarefas.
-4. Depois dessas passos os demais estao liberados para consulta, edição e remoção.
+Após concluir esses passos, as demais funcionalidades, como consulta, edição e remoção, estarão disponíveis.
