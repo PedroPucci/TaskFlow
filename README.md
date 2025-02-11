@@ -139,3 +139,9 @@ Biblioteca utilizada para validações e compartilhamento de recursos comuns:
 7. Npgsql.EntityFrameworkCore.PostgreSQL – Integração do Entity Framework Core com PostgreSQL.
 8. Serilog.AspNetCore – Biblioteca para logging estruturado no ASP.NET Core.
 9. Swashbuckle.AspNetCore – Ferramenta para documentar APIs ASP.NET Core com Swagger.
+---
+### **Executando a solução**
+1. cadastre usuarios.
+2. cadastre categorias.
+3. cadastre tarefas.
+4. Depois dessas passos os demais estao liberados para consulta, edição e remoção.
