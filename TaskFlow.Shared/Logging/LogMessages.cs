@@ -29,5 +29,7 @@
         public static string GetAllCategoriesError(Exception ex) => $"Message: Error to loading the list Category: {ex.Message}";
         public static string GetAllCategoriesSuccess() => "Message: GetAll with success Category.";
         public static string UpdatingErrorCategory(Exception ex) => $"Message: Error updating Category: {ex.Message}";
+        public static string DeleteCategoryError(Exception ex) => $"Message: Error to delete a Category: {ex.Message}";
+        public static string DeleteCategorySuccess() => "Message: Delete with success Category.";
     }
 }

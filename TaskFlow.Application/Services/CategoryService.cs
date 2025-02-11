@@ -52,9 +52,29 @@ namespace TaskFlow.Application.Services
             }
         }
 
-        public Task DeleteCategoryAsync(int categoryId)
+        public async Task DeleteCategoryAsync(int categoryId)
         {
-            throw new NotImplementedException();
+            using var transaction = _repositoryUoW.BeginTransaction();
+            try
+            {
+                var categoryToDelete = await _repositoryUoW.CategoryRepository.GetCategoryByIdAsync(categoryId);
+                if (categoryToDelete is not null)
+                    _repositoryUoW.CategoryRepository.DeleteCategoryAsync(categoryToDelete);
+
+                await _repositoryUoW.SaveAsync();
+                await transaction.CommitAsync();
+            }
+            catch (Exception ex)
+            {
+                Log.Error(LogMessages.DeleteCategoryError(ex));
+                transaction.Rollback();
+                throw new InvalidOperationException("Message: Error to delete a Category.");
+            }
+            finally
+            {
+                Log.Error(LogMessages.DeleteCategorySuccess());
+                transaction.Dispose();
+            }
         }
 
         public async Task<List<CategoryEntity>> GetAllCategoriesAsync()
