@@ -145,3 +145,4 @@ Biblioteca utilizada para validações e compartilhamento de recursos comuns:
 2. cadastre categorias.
 3. cadastre tarefas.
 - Após concluir esses passos, as demais funcionalidades, como consulta, edição e remoção, estarão disponíveis.
+- Obs: Para remover uma categoria primeiro remova a atividade e depois a categoria.
