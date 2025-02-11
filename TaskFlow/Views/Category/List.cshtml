@@ -1,5 +1,45 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model List<TaskFlow.Domain.Entity.CategoryEntity>
+
 @{
+    ViewData["Title"] = "Lista de Categorias";
 }
+
+<h2>Lista de Categorias</h2>
+
+@if (Model == null || !Model.Any())
+{
+    <div class="alert alert-warning" role="alert">
+        Nenhuma categoria encontrada.
+    </div>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nome</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var category in Model)
+            {
+                <tr>
+                    <td>@category.Id</td>
+                    <td>@category.Name</td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@category.Id" class="btn btn-warning">Editar</a>
+
+                        <form asp-action="Delete" method="post" onsubmit="return confirm('Tem certeza que deseja excluir esta categoria?');" style="display:inline;">
+                            <input type="hidden" name="id" value="@category.Id" />
+                            <button type="submit" class="btn btn-danger">Excluir</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+<a asp-action="Create" class="btn btn-primary">Nova Categoria</a>

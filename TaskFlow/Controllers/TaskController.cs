@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using TaskFlow.Application.UnitOfWork;
 using TaskFlow.Domain.Dto;
 using TaskFlow.Domain.Entity;
@@ -15,9 +16,15 @@ namespace TaskFlow.Controllers
         }
 
         [HttpGet]
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
+            await PopulateCategories();
             return View();
+        }
+        private async Task PopulateCategories()
+        {
+            var categories = await _serviceUoW.CategoryService.GetAllCategoriesAsync();
+            ViewBag.Categories = new SelectList(categories, "Id", "Name");
         }
 
         [HttpPost]
@@ -25,13 +32,17 @@ namespace TaskFlow.Controllers
         public async Task<IActionResult> Create(TaskEntity taskEntity)
         {
             if (!ModelState.IsValid)
+            {
+                await PopulateCategories();
                 return View(taskEntity);
+            }
 
             var result = await _serviceUoW.TaskService.AddTaskAsync(taskEntity);
             if (result.Success)
                 return RedirectToAction("Success");
 
             ModelState.AddModelError("", "Erro ao cadastrar tarefa.");
+            await PopulateCategories();
             return View(taskEntity);
         }
 

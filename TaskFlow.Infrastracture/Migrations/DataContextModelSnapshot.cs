@@ -22,6 +22,29 @@ namespace TaskFlow.Infrastracture.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("TaskFlow.Domain.Entity.CategoryEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime?>("CreateDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime?>("ModificationDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("CategoryEntity");
+                });
+
             modelBuilder.Entity("TaskFlow.Domain.Entity.TaskEntity", b =>
                 {
                     b.Property<int>("Id")
@@ -29,6 +52,9 @@ namespace TaskFlow.Infrastracture.Migrations
                         .HasColumnType("integer");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("integer");
 
                     b.Property<DateTime?>("CreateDate")
                         .HasColumnType("timestamp with time zone");
@@ -53,6 +79,8 @@ namespace TaskFlow.Infrastracture.Migrations
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
 
                     b.HasIndex("UserId");
 
@@ -95,13 +123,26 @@ namespace TaskFlow.Infrastracture.Migrations
 
             modelBuilder.Entity("TaskFlow.Domain.Entity.TaskEntity", b =>
                 {
+                    b.HasOne("TaskFlow.Domain.Entity.CategoryEntity", "Category")
+                        .WithMany("Tasks")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("TaskFlow.Domain.Entity.UserEntity", "User")
                         .WithMany("Tasks")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.Navigation("Category");
+
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("TaskFlow.Domain.Entity.CategoryEntity", b =>
+                {
+                    b.Navigation("Tasks");
                 });
 
             modelBuilder.Entity("TaskFlow.Domain.Entity.UserEntity", b =>
